@@ -190,17 +190,17 @@ export default function ControlPanel() {
                   </div>
                 </div>
 
-                {/* Control Buttons with Proper Highlighting */}
+                {/* Control Buttons with Hover Scale Animation */}
                 <div className="flex items-center justify-center space-x-3 sm:space-x-4">
                   <button
                     onClick={() => publishMessage(equipment.topic, "ON")}
                     disabled={!isOnline || !equipment.isOnline}
-                    className={`flex-1 sm:flex-none px-4 sm:px-8 py-3 rounded-lg sm:rounded-xl font-medium transition-all duration-200 ring-2 ring-gray-300 ${
+                    className={`flex-1 sm:flex-none px-4 sm:px-8 py-3 rounded-lg sm:rounded-xl font-medium transition-all duration-200 ring-2 ring-gray-300 transform hover:scale-105 active:scale-95 ${
                       equipment.status === "ON"
                         ? "bg-green-600 border-green-700 shadow-lg text-green-600 ring-2 ring-green-300 ring-opacity-50 scale-105"
                         : isOnline && equipment.isOnline
                         ? "bg-white text-green-600 hover:bg-green-50 shadow-md hover:shadow-lg"
-                        : "bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed"
+                        : "bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed hover:scale-100"
                     }`}
                   >
                     ON
@@ -208,12 +208,12 @@ export default function ControlPanel() {
                   <button
                     onClick={() => publishMessage(equipment.topic, "OFF")}
                     disabled={!isOnline || !equipment.isOnline}
-                    className={`flex-1 sm:flex-none px-4 sm:px-8 py-3 rounded-lg sm:rounded-xl font-medium transition-all duration-200 ring-2 ring-gray-300 ${
+                    className={`flex-1 sm:flex-none px-4 sm:px-8 py-3 rounded-lg sm:rounded-xl font-medium transition-all duration-200 ring-2 ring-gray-300 transform hover:scale-105 active:scale-95 ${
                       equipment.status === "OFF"
                         ? "bg-red-600 border-red-700 shadow-lg text-red-600 ring-2 ring-red-300 ring-opacity-50 scale-105"
                         : isOnline && equipment.isOnline
                         ? "bg-white text-red-600 hover:bg-red-50 shadow-md hover:shadow-lg"
-                        : "bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed"
+                        : "bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed hover:scale-100"
                     }`}
                   >
                     OFF
