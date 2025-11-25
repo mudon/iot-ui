@@ -30,11 +30,10 @@ jobs:
       # Create .env file from GitHub Secrets
       - name: Create .env file
         run: |
-          echo "VITE_MQTT_URL_CLIENT=${{ secrets.VITE_MQTT_URL_CLIENT }}" >> .env
-          echo "VITE_HIVEMQ_USERNAME=${{ secrets.VITE_HIVEMQ_USERNAME }}" >> .env
-          echo "VITE_HIVEMQ_PASSWORD=${{ secrets.VITE_HIVEMQ_PASSWORD }}" >> .env
-          echo "VITE_MQTT_TOPIC_26=${{ secrets.VITE_MQTT_TOPIC_26 }}" >> .env
-          echo "VITE_MQTT_TOPIC_27=${{ secrets.VITE_MQTT_TOPIC_27 }}" >> .env
+          echo "VITE_MQTT_URL_CLIENT=${{ secrets.MQTT_URL_CLIENT }}" >> .env
+          echo "VITE_HIVEMQ_USERNAME=${{ secrets.HIVEMQ_USERNAME }}" >> .env
+          echo "VITE_HIVEMQ_PASSWORD=${{ secrets.HIVEMQ_PASSWORD }}" >> .env
+          echo "VITE_MQTT_TOPIC_27=${{ secrets.MQTT_TOPIC_27 }}" >> .env
 
       - name: Install dependencies
         run: npm install
