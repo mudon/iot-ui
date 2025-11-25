@@ -13,12 +13,18 @@ interface Equipment {
 }
 
 export default function ControlPanel() {
+  const mqttUrl = import.meta.env.VITE_MQTT_URL_CLIENT;
+  const mqttUser = import.meta.env.VITE_HIVEMQ_USERNAME;
+  const mqttPass = import.meta.env.VITE_HIVEMQ_PASSWORD;
+  const mqttTopic27 = import.meta.env.VITE_MQTT_TOPIC_27;
+
   const [client, setClient] = useState<MqttClient | null>(null);
   const [isOnline, setIsOnline] = useState(false);
   const [equipments, setEquipments] = useState<Equipment[]>([
     {
       id: "1",
       name: "Lampu Luar",
+      topic: mqttTopic27,
       type: "light",
       status: "OFF",
       isOnline: false
@@ -26,7 +32,11 @@ export default function ControlPanel() {
   ]);
 
   useEffect(() => {
-
+    const mqttClient = mqtt.connect(mqttUrl, {
+      username: mqttUser, // if required
+      password: mqttPass, // if required
+      reconnectPeriod: 2000,
+    });
 
     mqttClient.on("connect", () => {
       console.log("MQTT Connected");
@@ -166,22 +176,22 @@ export default function ControlPanel() {
                     disabled={!isOnline || !equipment.isOnline}
                     className={`px-8 py-3 rounded-xl font-medium transition-all duration-200 ${
                       isOnline && equipment.isOnline
-                        ? "bg-green-500 hover:bg-green-600 text-white shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                        ? "bg-green-500 hover:bg-green-600 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
                         : "bg-gray-200 text-gray-400 cursor-not-allowed"
                     }`}
                   >
-                    Turn ON
+                    ON
                   </button>
                   <button
                     onClick={() => publishMessage(equipment.topic, "OFF")}
                     disabled={!isOnline || !equipment.isOnline}
                     className={`px-8 py-3 rounded-xl font-medium transition-all duration-200 ${
                       isOnline && equipment.isOnline
-                        ? "bg-red-500 hover:bg-red-600 text-white shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                        ? "bg-red-500 hover:bg-red-600 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
                         : "bg-gray-200 text-gray-400 cursor-not-allowed"
                     }`}
                   >
-                    Turn OFF
+                    OFF
                   </button>
                 </div>
               </div>
