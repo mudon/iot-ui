@@ -19,7 +19,6 @@ export default function ControlPanel() {
     {
       id: "1",
       name: "Lampu Luar",
-      topic: "home/gpio-rumah-sewa-tasek-gelugor/26",
       type: "light",
       status: "OFF",
       isOnline: false
@@ -27,11 +26,7 @@ export default function ControlPanel() {
   ]);
 
   useEffect(() => {
-    const mqttClient = mqtt.connect("wss://68b0430038174c67831791d806a5f80a.s1.eu.hivemq.cloud:8884/mqtt", {
-      username: "mudon", // if required
-      password: "Hazim123", // if required
-      reconnectPeriod: 2000,
-    });
+
 
     mqttClient.on("connect", () => {
       console.log("MQTT Connected");
