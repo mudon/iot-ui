@@ -88,7 +88,7 @@ export default function ControlPanel() {
   };
 
   const getEquipmentIcon = (type: string, status: "ON" | "OFF") => {
-    const baseClasses = "w-8 h-8 transition-colors duration-300";
+    const baseClasses = "w-6 h-6 sm:w-8 sm:h-8 transition-colors duration-300";
     
     switch (type) {
       case "light":
@@ -109,46 +109,46 @@ export default function ControlPanel() {
   };
 
   return (
-    <div className="min-h-screen w-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+    <div className="min-h-screen w-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-3 sm:p-4">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">Smart Home Control</h1>
-          <div className="flex items-center justify-center space-x-4">
-            <div className="text-lg text-gray-600">
+        <div className="text-center mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-4xl font-bold text-gray-800 mb-2">Smart Home Control</h1>
+          <div className="flex items-center justify-center space-x-2 sm:space-x-4">
+            <div className="text-sm sm:text-lg text-gray-600">
               System Status:
-              <span className={`ml-2 font-semibold ${isOnline ? "text-green-500" : "text-red-500"}`}>
+              <span className={`ml-1 sm:ml-2 font-semibold ${isOnline ? "text-green-500" : "text-red-500"}`}>
                 {isOnline ? "Online" : "Offline"}
               </span>
             </div>
             {isOnline ? (
-              <Wifi className="w-5 h-5 text-green-500" />
+              <Wifi className="w-4 h-4 sm:w-5 sm:h-5 text-green-500" />
             ) : (
-              <WifiOff className="w-5 h-5 text-red-500" />
+              <WifiOff className="w-4 h-4 sm:w-5 sm:h-5 text-red-500" />
             )}
           </div>
         </div>
 
-        {/* Equipment List - Single Column */}
-        <div className="space-y-4">
+        {/* Equipment List - Mobile Responsive */}
+        <div className="space-y-3 sm:space-y-4">
           {equipments.map((equipment) => (
             <div
               key={equipment.id}
-              className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 border border-gray-200"
+              className="bg-white rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-4 sm:p-6 border border-gray-200"
             >
-              <div className="flex items-center justify-between">
-                {/* Left Side: Equipment Info */}
-                <div className="flex items-center space-x-6 flex-1">
-                  <div className="flex items-center space-x-4">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                {/* Equipment Info */}
+                <div className="flex items-center justify-between sm:justify-start sm:space-x-6 flex-1">
+                  <div className="flex items-center space-x-3 sm:space-x-4">
                     {getEquipmentIcon(equipment.type, equipment.status)}
                     <div>
-                      <h3 className="font-semibold text-gray-800 text-xl">{equipment.name}</h3>
-                      <p className="text-sm text-gray-500 capitalize">{equipment.type}</p>
+                      <h3 className="font-semibold text-gray-800 text-lg sm:text-xl">{equipment.name}</h3>
+                      <p className="text-xs sm:text-sm text-gray-500 capitalize">{equipment.type}</p>
                     </div>
                   </div>
                   
-                  {/* Status Indicator */}
-                  <div className="flex items-center space-x-4">
+                  {/* Status Indicator - Hidden on mobile, shown on tablet/desktop */}
+                  <div className="hidden sm:flex items-center space-x-4">
                     <div className={`px-3 py-2 rounded-full text-sm font-medium ${
                       equipment.isOnline 
                         ? "bg-green-100 text-green-800" 
@@ -169,15 +169,38 @@ export default function ControlPanel() {
                   </div>
                 </div>
 
-                {/* Right Side: Control Buttons */}
-                <div className="flex items-center space-x-4">
+                {/* Mobile Status Indicator */}
+                <div className="sm:hidden flex items-center justify-between">
+                  <div className={`px-2 py-1 rounded-full text-xs font-medium ${
+                    equipment.isOnline 
+                      ? "bg-green-100 text-green-800" 
+                      : "bg-red-100 text-red-800"
+                  }`}>
+                    {equipment.isOnline ? "Connected" : "Offline"}
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className={`w-2 h-2 rounded-full ${
+                      equipment.status === "ON" ? "bg-green-500 animate-pulse" : "bg-gray-300"
+                    }`}></div>
+                    <span className={`font-medium text-sm ${
+                      equipment.status === "ON" ? "text-green-600" : "text-gray-600"
+                    }`}>
+                      {equipment.status}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Control Buttons with Proper Highlighting */}
+                <div className="flex items-center justify-center space-x-3 sm:space-x-4">
                   <button
                     onClick={() => publishMessage(equipment.topic, "ON")}
                     disabled={!isOnline || !equipment.isOnline}
-                    className={`px-8 py-3 rounded-xl font-medium transition-all duration-200 ${
-                      isOnline && equipment.isOnline
-                        ? "bg-green-500 hover:bg-green-600 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
-                        : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                    className={`flex-1 sm:flex-none px-4 sm:px-8 py-3 rounded-lg sm:rounded-xl font-medium transition-all duration-200 ring-2 ring-gray-300 ${
+                      equipment.status === "ON"
+                        ? "bg-green-600 border-green-700 shadow-lg text-green-600 ring-2 ring-green-300 ring-opacity-50 scale-105"
+                        : isOnline && equipment.isOnline
+                        ? "bg-white text-green-600 hover:bg-green-50 shadow-md hover:shadow-lg"
+                        : "bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed"
                     }`}
                   >
                     ON
@@ -185,10 +208,12 @@ export default function ControlPanel() {
                   <button
                     onClick={() => publishMessage(equipment.topic, "OFF")}
                     disabled={!isOnline || !equipment.isOnline}
-                    className={`px-8 py-3 rounded-xl font-medium transition-all duration-200 ${
-                      isOnline && equipment.isOnline
-                        ? "bg-red-500 hover:bg-red-600 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
-                        : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                    className={`flex-1 sm:flex-none px-4 sm:px-8 py-3 rounded-lg sm:rounded-xl font-medium transition-all duration-200 ring-2 ring-gray-300 ${
+                      equipment.status === "OFF"
+                        ? "bg-red-600 border-red-700 shadow-lg text-red-600 ring-2 ring-red-300 ring-opacity-50 scale-105"
+                        : isOnline && equipment.isOnline
+                        ? "bg-white text-red-600 hover:bg-red-50 shadow-md hover:shadow-lg"
+                        : "bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed"
                     }`}
                   >
                     OFF
